@@ -1,0 +1,23 @@
+Shop.module('Products', function(Products, App, Backbone, Marionette, $, _) {
+
+    // Product Model
+    // ----------
+
+    Products.Product = Backbone.Model.extend({
+        urlRoot: "product_api/product"       
+    });
+
+    // Products Collection
+    // ---------------
+
+    Products.ProductList = Backbone.Collection.extend({
+        model: Products.Product,
+        url: 'product_api/products',
+
+        parse : function(res)
+        {
+            return res;
+        }
+    });
+
+});

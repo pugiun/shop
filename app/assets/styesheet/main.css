@@ -1,0 +1,15 @@
+.link-delete, .link-edit{
+	cursor: pointer;
+}
+
+.btn.btn-blue {
+	height: 30px;
+}
+
+#main {
+	margin-top: 100px;
+}
+
+#main h1 {
+	font-size: 30px;
+}

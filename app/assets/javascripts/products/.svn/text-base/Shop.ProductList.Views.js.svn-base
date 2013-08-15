@@ -1,0 +1,120 @@
+Shop.module('ProductList.Views', function(Views, App, Backbone, Marionette, $, _) {
+    Views.ProductLayoutView = Backbone.Marionette.Layout.extend({
+        template: "#template-product-layout",
+        regions: {
+            region1: "#region1",
+            region2: "#region2"
+        },
+        events: {
+            'click #link-add-product': 'viewCreateProduct'
+        },  
+        initialize: function() {
+            //this.listenTo(this.model, 'change', this.render);
+        },
+        onShow: function(){
+            //$(window).resize();
+        },
+    	viewCreateProduct: function(){
+    		//this.region2.show(new Views.ProductView());
+    		App.main.currentView.region2.show(new Views.ProductView());
+    	}           
+    });
+ 
+     Views.ItemView = Marionette.ItemView.extend({
+        template: "#template-product-item",
+        tagName: "tr",
+        events: {
+            'click .link-delete': 'deleteProduct',
+            'click .link-edit': 'viewEditProduct'
+        },
+        onShow: function(){
+            var indexOfTThisModel = this.model.collection.indexOf(this.model);
+            if(indexOfTThisModel % 2 == 0){
+                this.el.className = 'even';
+            }
+            else{
+                this.el.className = 'odd';
+            }
+        },
+        deleteProduct: function(event){
+        	var _id = $(event.currentTarget).data("id");
+            var product= new App.Products.Product({id : _id});
+            var that = this;
+            product.destroy({
+                success: function(product, response){
+                    console.log("product removed");
+                    that.model.collection.remove(product);
+                     App.main.currentView.region2.show(new App.Layout.EmptyView());  
+                }
+            });       	
+        },
+        viewEditProduct: function(event){
+        	var _id = $(event.currentTarget).data("id");        	
+            var product= new App.Products.Product({id : _id});
+            product.fetch({
+            	success: function(){
+            		 App.main.currentView.region2.show(new Views.ProductView({model: product}));   
+            	}
+            });             	
+        }          
+    });  
+    
+    Views.ProductListView = Marionette.CompositeView.extend({
+        itemView: Views.ItemView,
+        template: "#template-product-list",
+        tagName: "div",       	
+        id: 'product-listing',
+        className: "row-fluid", 
+        wrapped: true,
+        itemViewContainer: '#product-table',       
+        intialize: function() {
+        	this.listenTo(this.collection, 'all', this.render);
+    	}       
+	});
+	
+	Views.ProductView = Marionette.Layout.extend({
+		template:"#template-add-product",
+        className: "container-fluid padded",
+        events: {
+            'click #btn-save': 'saveProduct',
+            'click #btn-cancel': 'cancelEdit'
+        },
+        onShow: function(){
+        	if(this.model){
+        		$("legend").text("Edit Product");
+        	}
+        },
+        cancelEdit: function(){
+            var _name = $("#text-name").val();
+            var _code = $("#text-code").val();       	
+        },
+        saveProduct: function(){ 
+            var _name = $("#text-name").val();
+            var _code = $("#text-code").val();
+            var inputs = $(this.el).find("form#form-create-product :input").not("[type=submit]");
+            inputs.jqBootstrapValidation();
+            inputs.trigger("change.validation", {submitting: true});
+            var errors = inputs.jqBootstrapValidation("collectErrors");
+            var product = new App.Products.Product();
+            if(this.model){
+            	product.set({id: this.model.id})
+            }           
+            var that = this;
+            if($.isEmptyObject(errors)){
+            	product.save({
+                        name: _name,
+                        code: _code
+                    }, {
+                        success: function(product,response){
+                            console.log("success");
+                            this.products.remove(product);
+                            this.products.add(product);
+                            $("#text-name").val('');
+            				$("#text-code").val('');
+                        }
+                });
+            }          
+		}         			
+	})
+	
+})	

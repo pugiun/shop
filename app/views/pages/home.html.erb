@@ -1,0 +1,79 @@
+<section id="main">	
+</section>	
+<script type="text/x-handlebars-template" id="template-product-layout">
+	<section id="region1"></section>
+	<div class="row-fluid">
+		<div class="action-nav-normal span10 offset1">
+			<div class="action-nav-button span3" style="margin-left: 0px;">
+				<a title="New Product" id="link-add-product" class="btn btn-info" >
+					<i class="icon-plus"></i>
+					<span>New Product</span>
+				</a>
+			</div>
+		</div>
+	</div>
+	<section id="region2"></section>
+</script>
+<script type="text/x-handlebars-template" id="template-product-list">
+	<div class="span10 offset1">
+		<div class="page-header">
+			<h1>Products</h1>
+		</div>
+		<table id="product-table" class="table table-bordered table-striped table-hover">
+	    <thead>
+	        <tr>
+	            <th>Product Code</th>
+	            <th>Name</th>
+	            <th width="100">Edit</th>
+	            <th width="100">Delete</th>
+	        </tr>
+	    </thead>
+	</table>
+	</div>	
+</script>
+<script type="text/x-handlebars-template" id="template-product-item">
+	<td>{{code}}</td>
+	<td>{{name}}</td>
+	<td style="text-align: center;"><a class="link-edit" data-id="{{id}}"><i class="icon-edit"></i></a></td>
+	<td style="text-align: center;"><a class="link-delete" data-id="{{id}}"><i class="icon-remove"></i></a></a></td>
+</script>
+<script type="text/x-handlebars-template" id="template-add-product">
+    <div class="span10 offset1">
+		<div class="page-header">
+			<h1>Add Product</h1>
+		</div>
+        <div class="box-content">
+            <form class="form-horizontal well" id="form-create-product">
+                <fieldset>
+                	<div class="padded">
+	                    <div class="control-group">
+	                        <label class="control-label" for="input-name">Name</label>
+	                        <div class="controls">
+	                            <input id="text-name" class="input-xlarge" type="text" value="{{name}}" required>
+	                            <p class="help-block"></p>
+	                        </div>
+	                    </div>
+	                    <div class="control-group">
+	                        <label class="control-label" for="input-code">Code</label>
+	                        <div class="controls">
+	                            <input id="text-code" class="input-xlarge" type="text" value="{{code}}" required>
+	                            <p class="help-block"></p>
+	                        </div>
+	                    </div>
+	                </div>
+                </fieldset>
+                <div class="form-actions">
+                    <a class="btn btn-primary" id="btn-save">Save</a>
+                    <a class="btn btn-default" type="reset">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+<script type="text/x-handlebars-template" id="template-empty">
+</script>
+<script type="text/javascript">
+   $(function(){
+   		Shop.start();
+   });
+</script> 
